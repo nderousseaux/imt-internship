@@ -46,21 +46,21 @@ def proba_perte(m, a, b, ratio):
 	sum_term = 0
 	for k in range(0, m*a):
 		poisson_prob = poisson.pmf(k, lambda_)
-		sum_term += poisson_prob * (1 - p_ruin(m*a - (b*k), a, b, ratio))
+		sum_term += poisson_prob * (1 - p_ruin_simplifie(m*a - b*k, a, b, ratio))
 	P_rattrape = 1 - sum_term
 	return P_rattrape
 
 
-def compute_lambda(M, a, b, ratio):
+def compute_lambda(m, a, b, ratio):
 	""" Lambda dans la formule du gamblers
 	"""
 	a_prob = A(alpha(a, b), ratio)
 	b_prob = B(alpha(a, b), ratio)
 
-	return round(a_prob * M / b_prob)
+	return round(a_prob * m / b_prob)
 	
 
-def p_ruin_simplifie(m, a, b, ratio):
+def p_ruin_simplifie(M, a, b, ratio):
 	""" Probabilité de ruine pour un m donné
 	/!\ Quand les racines sont distinctes !
 	
@@ -81,11 +81,11 @@ def p_ruin_simplifie(m, a, b, ratio):
 		for i in range(0, nu):
 			if i != j:
 				prod_term *= (1 - eta[i]) / (eta[j] - eta[i])
-		sum_term += eta[j] ** m * prod_term
+		sum_term += eta[j] ** M * prod_term
 	return sum_term
 
 
-def p_ruin(m, a, b, ratio):
+def p_ruin(M, a, b, ratio):
 	""" Probabilité de ruine pour un m donné
 
 	P_{ruin}(M) = 
@@ -104,7 +104,7 @@ def p_ruin(m, a, b, ratio):
 		prod_term = 1
 		for j in range(1, n):
 			prod_term *= (1 - etas[j])
-		sum_term += phi(n, m-n+1, etas[:n]) * prod_term
+		sum_term += phi(n, M-n+1, etas[:n]) * prod_term
 	return sum_term
 
 
